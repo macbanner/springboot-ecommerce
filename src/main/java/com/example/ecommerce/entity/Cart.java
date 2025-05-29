@@ -1,0 +1,46 @@
+package com.example.ecommerce.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "carts")
+public class Cart extends BaseEntity {
+
+    // Bir sepet bir müşteriye aittir.
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
+    private Customer customer;
+
+    // Sepetteki ürünler
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<CartItem> items = new ArrayList<>();
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal totalPrice = BigDecimal.ZERO;
+
+    // Helper method to add cart item (bidirectional relationship)
+    public void addItem(CartItem item) {
+        items.add(item);
+        item.setCart(this);
+        recalculateTotalPrice();
+    }
+
+    public void removeItem(CartItem item) {
+        items.remove(item);
+        item.setCart(null); // Önemli: orphanRemoval'ın düzgün çalışması için
+        recalculateTotalPrice();
+    }
+
+    public void recalculateTotalPrice() {
+        this.totalPrice = items.stream()
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+}
