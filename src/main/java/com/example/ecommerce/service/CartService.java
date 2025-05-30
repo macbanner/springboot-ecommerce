@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 public class CartService {
 
     private final CartRepository cartRepository;
-
     private final ProductRepository productRepository;
 
     public CartService(CartRepository cartRepository, ProductRepository productRepository) {
@@ -38,38 +37,46 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("Ürün bulunamadı!"));
 
         if (product.getStock() < quantity) {
-            throw new RuntimeException("Yeterli stok yok!");
+            throw new RuntimeException("Yeterli stok yok.");
         }
 
-        // Sepette ürün var mı kontrol et, varsa miktarı güncelle yoksa yeni CartItem ekle
+        // Sepette ürün var mı? Varsa miktarı güncelle yoksa yeni CartItem ekle
         CartItem item = cart.getItems().stream()
                 .filter(ci -> ci.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElse(null);
 
         if (item != null) {
-            item.setQuantity(item.getQuantity() + quantity);
+            item.setQuantity(item.getQuantity() + quantity); //sepetteyse miktarı artır.
+            cart.recalculateTotalPrice();
         } else {
             item = new CartItem();
             item.setProduct(product);
             item.setQuantity(quantity);
-            item.setCart(cart);
-            cart.getItems().add(item);
+            cart.addItem(item);
         }
-        cart.recalculateTotalPrice();
-        return cartRepository.save(cart);
+
+        return cartRepository.save(cart); //sepeti kaydet
     }
 
     @Transactional
     public Cart removeProductFromCart(Long customerId, Long productId) {
         Cart cart = getCart(customerId);
-        cart.getItems().removeIf(ci -> ci.getProduct().getId().equals(productId));
-        cart.recalculateTotalPrice();
+
+        CartItem itemToRemove = cart.getItems().stream()
+                .filter(ci -> ci.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElse(null);
+
+        if (itemToRemove != null) { //ürün varsa çıkar.
+            cart.removeItem(itemToRemove);
+        }
+
         return cartRepository.save(cart);
     }
 
     @Transactional
-    public Cart emptyCart(Long customerId) {
+    public Cart emptyCart(Long customerId) { //sepeti resetle.
         Cart cart = getCart(customerId);
         cart.getItems().clear();
         cart.setTotalPrice(BigDecimal.ZERO);

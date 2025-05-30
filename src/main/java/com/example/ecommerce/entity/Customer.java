@@ -19,9 +19,9 @@ public class Customer extends BaseEntity {
     private String email;
     private String phone;
 
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL) //Müşteri silinirse sepeti de silinir.
     private Cart cart;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>(); //Müşteri silinirse siparişler de silinir.
 }

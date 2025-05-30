@@ -13,19 +13,20 @@ import java.util.List;
 @Table(name = "carts")
 public class Cart extends BaseEntity {
 
-    // Bir sepet bir müşteriye aittir.
+    // Bir sepet bir müşteriye ait. İlişkiye ihtiyaç olduğunda veri çekilir.
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
-    // Sepetteki ürünler
+    // Sepetteki ürünler. İşlemi ilgili diğer entity'lere de uygula. //Veriyi anında yükle.
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItem> items = new ArrayList<>();
+    //CartItem sepette değilse veritabanından da silinmeli.
 
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
-    // Helper method to add cart item (bidirectional relationship)
+
     public void addItem(CartItem item) {
         items.add(item);
         item.setCart(this);
@@ -34,7 +35,7 @@ public class Cart extends BaseEntity {
 
     public void removeItem(CartItem item) {
         items.remove(item);
-        item.setCart(null); // Önemli: orphanRemoval'ın düzgün çalışması için
+        item.setCart(null); //
         recalculateTotalPrice();
     }
 

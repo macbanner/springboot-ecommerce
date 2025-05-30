@@ -18,7 +18,7 @@ public class CartItem extends BaseEntity {
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.EAGER) // Fiyat için EAGER olabilir
+    @ManyToOne(fetch = FetchType.EAGER) //Fiyat değişikliğini UI'da görebilmek adına hızlı değişiklik.
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 

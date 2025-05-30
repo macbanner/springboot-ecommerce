@@ -16,7 +16,7 @@ public class ProductService {
 
     public Product getProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ürün bulunamadı!"));
+                .orElseThrow(() -> new RuntimeException("Ürün bulunamadı."));
     }
 
     public Product createProduct(Product product) {
@@ -25,8 +25,8 @@ public class ProductService {
 
     public Product updateProduct(Product product) {
         Product existing = productRepository.findById(product.getId())
-                .orElseThrow(() -> new RuntimeException("Ürün bulunamadı!"));
-        // Alanların güncellenmesi
+                .orElseThrow(() -> new RuntimeException("Ürün bulunamadı."));
+        //product değerlerinin güncellenmesi
         existing.setName(product.getName());
         existing.setDescription(product.getDescription());
         existing.setPrice(product.getPrice());

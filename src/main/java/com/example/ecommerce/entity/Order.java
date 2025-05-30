@@ -20,7 +20,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    // Siparişe ait benzersiz kod (örn. UUID)
+    // Siparişe ait benzersiz kod.
     private String orderCode = UUID.randomUUID().toString();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)

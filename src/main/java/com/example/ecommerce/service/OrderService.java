@@ -34,7 +34,6 @@ public class OrderService {
         }
 
         Order order = new Order();
-        // İlgili müşteri set edilmeli (örn: order.setCustomer(...))
         List<OrderItem> orderItems = new ArrayList<>();
 
         for (CartItem cartItem : cart.getItems()) {
@@ -44,7 +43,7 @@ public class OrderService {
                 throw new RuntimeException("Ürün stok yetersiz: " + product.getName());
             }
 
-            // Stoktan düş
+            // Stok yeterliyse order sonrası stoktan düş
             product.setStock(product.getStock() - cartItem.getQuantity());
             productRepository.save(product);
 
@@ -61,7 +60,7 @@ public class OrderService {
         order.recalculateTotal();
         Order savedOrder = orderRepository.save(order);
 
-        // Sipariş sonrası sepeti boşalt
+        // Sipariş sonrası sepeti resetle.
         cart.getItems().clear();
         cart.setTotalPrice(BigDecimal.ZERO);
         cartRepository.save(cart);
