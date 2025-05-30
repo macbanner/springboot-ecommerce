@@ -1,6 +1,6 @@
 # 📦 E-Commerce Uygulaması – Proje Dokümantasyonu
 
-## 1. Giriş 🚀
+## 1. Giriş 
 
 Bu proje, basit bir e-ticaret sisteminin backend tarafını oluşturmak amacıyla geliştirilmiştir. Kullanıcılar ürünleri görüntüleyebilir, sepete ekleyebilir ve sipariş oluşturabilir. Spring Boot tabanlı bu yapı, örnek bir uygulama olarak katmanlı mimari ile geliştirilmiştir.
 
@@ -19,13 +19,13 @@ Bu proje, basit bir e-ticaret sisteminin backend tarafını oluşturmak amacıyl
 
 ---
 
-## 3. Projenin Amacı 🎯
+## 3. Projenin Amacı 
 
 Spring mimarisiyle temel bir e-ticaret uygulaması oluşturmak.
 
 ---
 
-## 4. Proje Yapısı 🗂️
+## 4. Proje Yapısı 
 
 Proje, aşağıdaki temel katmanlardan oluşmaktadır:
 
@@ -38,7 +38,7 @@ Proje, aşağıdaki temel katmanlardan oluşmaktadır:
 
 ---
 
-## 5. Veritabanı Yapısı 💾
+## 5. Veritabanı Yapısı 
 
 Temel veritabanı varlıkları şunlardır:
 
